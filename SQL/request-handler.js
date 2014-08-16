@@ -11,11 +11,11 @@ var findUser = db.findUser;
 exports.postMessage = function(req, res) {
   // declare this variable so we can retain access to it throughout the entire promise chain.
   var message;
-
   var resultsCallback = function (results) {
+      console.log('ResultsCB: ', results);
       var chat = {
         message: message.message,
-        userid: results[0].id,
+        userid: results[0].UserID,
         roomname: message.roomname
       };
 
@@ -28,9 +28,14 @@ exports.postMessage = function(req, res) {
       message = msg;
       findUser(msg.username, function (err, results) {
         // no results/0 results
+        console.log('FindUser Results: ', results);
         if (!results || !results.length) {
           // create the user, then post the message
-          saveUser(message.username, resultsCallback);
+          saveUser(msg.username, function(){
+            findUser(msg.username, function(error, result){
+              resultsCallback(results);
+            });
+          });
         } else {
           // user exists, post the message to this user
           resultsCallback(results);
