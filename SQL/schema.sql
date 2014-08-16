@@ -20,7 +20,7 @@ CREATE TABLE messages (
   MessageID int NOT NULL AUTO_INCREMENT,
   UserID int NOT NULL,
   Roomname varchar(20) NOT NULL,
-  MessageText blob NOT NULL,
+  MessageText varchar(255) NOT NULL,
   PRIMARY KEY(MessageID),
   FOREIGN KEY(UserID) REFERENCES users(UserID),
   FOREIGN KEY(Roomname) REFERENCES rooms(Roomname)

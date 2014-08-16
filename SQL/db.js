@@ -22,6 +22,12 @@ dbConnection.connect();
 
 
 exports.findAllMessages = function(cb){
+  var queryString = "SELECT * FROM messages;";
+
+  dbConnection.query( queryString, function(error, result){
+    cb(error, result);
+  } );
+
 };
 
 exports.findUser = function(username, cb){
@@ -58,15 +64,13 @@ exports.saveMessage = function(message, userid, roomname, cb){
     }
 
     // Add message to database
-    queryString = "INSERT INTO messages (MessageText,UserID,Roomname) VALUES (" + dbConnection.escape(message) + "," + userid + ",'" + roomname + "');"
+    queryString = "INSERT INTO messages SET UserID=" + userid + ",Roomname=" + dbConnection.escape(roomname) + ",MessageText=" + dbConnection.escape(message) + ";";
+
     dbConnection.query( queryString, function(error, result){
-      console.log('Message Saved: error ', error, "result", result);
       cb();
     } );
   } );
 };
-
-
 
 
 
